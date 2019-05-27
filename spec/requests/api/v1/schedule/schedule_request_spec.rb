@@ -7,6 +7,7 @@ describe 'Schedule API' do
     post "/api/v1/schedule?name=#{name}"
 
     json_response = JSON.parse(response.body, symbolize_names: true)
+
     expect(response).to be_successful
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:message)
@@ -18,9 +19,25 @@ describe 'Schedule API' do
     post "/api/v1/schedule"
 
     json_response = JSON.parse(response.body, symbolize_names: true)
+
     expect(response).to be_successful
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:message)
     expect(json_response[:message]).to eq("error")
+  end
+  it 'can show a schedule' do
+    name = "Abdulla's Planner"
+
+    post "/api/v1/schedule?name=#{name}"
+
+    expect(response).to be_successful
+
+    get "/api/v1/schedule"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    require 'pry' ; binding.pry 
+    expect(json_response).to have_key(:Schedule)
   end
 end
