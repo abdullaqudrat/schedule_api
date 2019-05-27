@@ -1,16 +1,11 @@
 class Api::V1::ScheduleController < ApplicationController
   def create
-    new_schedule = Schedule.new(schedule_params)
-    if new_schedule.save
-      render json: new_schedule
+    new_schedule = Schedule.new(params[:name]) unless params[:name].nil?
+    if new_schedule
+      render json: {message: "Schedule '#{new_schedule.name}' created"}
     else
       render json: {message: "error"}
     end
   end
-
-  private
-    def schedule_params
-      params.require(:schedule).permit(:name)
-    end
 end
 
