@@ -6,20 +6,20 @@ describe 'Schedule API' do
   let(:end_time) { 2 }
   let(:bad_start_time) { 2 }
 
-    it 'can create a appointment' do
+  it 'can create a appointment' do
 
-    post "/api/v1/schedule?name=planner"
+  post "/api/v1/schedule?name=planner"
 
-    expect(response).to be_successful
+  expect(response).to be_successful
 
-    post "/api/v1/schedule/planner/appointment?name=#{name}&start_time=#{start_time}&end_time=#{end_time}"
+  post "/api/v1/schedule/planner/appointment?name=#{name}&start_time=#{start_time}&end_time=#{end_time}"
 
-    json_response = JSON.parse(response.body, symbolize_names: true)
+  json_response = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response).to be_successful
-    expect(json_response).to be_a(Hash)
-    expect(json_response).to have_key(:message)
-    expect(json_response[:message]).to eq("Added dentist to planner")
+  expect(response).to be_successful
+  expect(json_response).to be_a(Hash)
+  expect(json_response).to have_key(:message)
+  expect(json_response[:message]).to eq("Added dentist to planner")
   end
   it 'fails to create a appointment with no params' do
 
@@ -99,6 +99,42 @@ describe 'Schedule API' do
 
     json_response = JSON.parse(response.body, symbolize_names: true)
 
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("error")
+  end
+  it 'can delete an appointment' do
+
+    post "/api/v1/schedule?name=planner"
+
+    expect(response).to be_successful
+
+    post "/api/v1/schedule/planner/appointment?name=#{name}&start_time=#{start_time}&end_time=#{end_time}"
+
+    expect(response).to be_successful
+
+    get "/api/v1/schedule/planner/appointment/#{name}"
+  
+    expect(response).to be_successful
+
+    delete "/api/v1/schedule/planner/appointment/#{name}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("Deleted appointment")
+  end
+  it 'fails to delete an appointment that doesnt exist' do
+
+    post "/api/v1/schedule?name=planner"
+
+    expect(response).to be_successful
+
+    delete "/api/v1/schedule/planner/appointment/failed"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
     expect(response).to be_successful
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:message)

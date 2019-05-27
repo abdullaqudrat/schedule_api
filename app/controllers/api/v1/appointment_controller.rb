@@ -20,4 +20,14 @@ class Api::V1::AppointmentController < ApplicationController
       render json: {message: "error", status: 404}
     end
   end
+
+  def destroy
+    schedule = Rails.cache.read(params[:schedule_id])
+    appointment = schedule.appointments.find { |appointment| appointment.name == params[:id] }
+    if schedule.appointments.delete(appointment)
+      render json: {message: "Deleted appointment"}
+    else
+      render json: {message: "error", status: 404}
+    end
+  end
 end
