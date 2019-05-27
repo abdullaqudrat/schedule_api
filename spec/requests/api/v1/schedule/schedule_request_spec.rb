@@ -4,7 +4,7 @@ describe 'Schedule API' do
   it 'can create a schedule' do
     name = "Abdulla's Planner"
 
-    get "/api/v1/schedule/create?name=#{name}"
+    post "/api/v1/schedule?name=#{name}"
 
     json_response = JSON.parse(response.body, symbolize_names: true)
 
