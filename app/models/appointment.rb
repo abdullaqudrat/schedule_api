@@ -4,7 +4,6 @@ class Appointment
     @name = name
     @start_time = start_time
     @end_time = end_time
-    check_time
   end
 
   def check_time

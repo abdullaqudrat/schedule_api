@@ -2,7 +2,8 @@ class Api::V1::ScheduleController < ApplicationController
   
   def show 
     schedule = Rails.cache.read(params[:id])
-    if schedule
+    if schedule && schedule.sort_appointments
+      Rails.cache.write(schedule.name, schedule)
       render json: schedule
     else
       render json: {message: "error", status: 404}
