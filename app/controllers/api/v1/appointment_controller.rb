@@ -12,7 +12,7 @@ class Api::V1::AppointmentController < ApplicationController
   def create
     schedule = Rails.cache.read(params[:schedule_id]) unless params[:schedule_id].nil?
     new_appointment = Appointment.new(params[:name], params[:start_time], params[:end_time]) unless params[:name].nil?
-    if schedule && new_appointment && new_appointment.check_time == true
+    if schedule && new_appointment && new_appointment.check_time == true && schedule.check_overlap(new_appointment).nil?
       schedule.appointments << new_appointment
       Rails.cache.write(schedule.name, schedule)
       render json: {message: "Added #{new_appointment.name} to #{schedule.name}"}

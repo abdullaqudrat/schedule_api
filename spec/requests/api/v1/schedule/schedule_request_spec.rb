@@ -198,4 +198,63 @@ describe 'Schedule API' do
     expect(json_response[:appointments][2]).to have_key(:end_time)
     expect(json_response[:appointments][2][:end_time]).to eq(end_time_3)
   end
+  it 'cannot add overlapping appointments for given schedule' do
+
+    post "/api/v1/schedule?name=#{name}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+
+    post "/api/v1/schedule/#{name}/appointment?name=#{apt_name_2}&start_time=#{start_time_2}&end_time=#{end_time_2}"
+    
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("Added kids to planner")
+
+    post "/api/v1/schedule/#{name}/appointment?name=#{apt_name_3}&start_time=#{start_time_3}&end_time=#{end_time_3}"
+    
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("Added party to planner")    
+
+    post "/api/v1/schedule/#{name}/appointment?name=#{apt_name_1}&start_time=#{start_time_1}&end_time=#{end_time_3}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("error")
+
+    get "/api/v1/schedule/#{name}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:name)
+    expect(json_response[:name]).to eq(name)
+    expect(json_response).to have_key(:appointments)
+    expect(json_response[:appointments]).to be_a(Array)
+    expect(json_response[:appointments].count).to eq(2)
+    expect(json_response[:appointments][0]).to have_key(:name)
+    expect(json_response[:appointments][0][:name]).to eq(apt_name_2)
+    expect(json_response[:appointments][0]).to have_key(:start_time)
+    expect(json_response[:appointments][0][:start_time]).to eq(start_time_2)
+    expect(json_response[:appointments][0]).to have_key(:end_time)
+    expect(json_response[:appointments][0][:end_time]).to eq(end_time_2)
+    expect(json_response[:appointments][1]).to have_key(:name)
+    expect(json_response[:appointments][1][:name]).to eq(apt_name_3)
+    expect(json_response[:appointments][1]).to have_key(:start_time)
+    expect(json_response[:appointments][1][:start_time]).to eq(start_time_3)
+    expect(json_response[:appointments][1]).to have_key(:end_time)
+    expect(json_response[:appointments][1][:end_time]).to eq(end_time_3)
+  end
 end
