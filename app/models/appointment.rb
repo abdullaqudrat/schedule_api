@@ -1,5 +1,5 @@
-class Schedule
-  # has_many :appointments
+class Appointment
+  # belongs_to :schedule
   
   attr_reader :name
   def initialize(name)
