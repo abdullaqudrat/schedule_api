@@ -4,4 +4,10 @@ class Schedule
     @name = name
     @appointments = []
   end
+
+  def sort_appointments
+    @appointments.sort_by! do |appointment|
+      appointment.start_time
+    end
+  end
 end
