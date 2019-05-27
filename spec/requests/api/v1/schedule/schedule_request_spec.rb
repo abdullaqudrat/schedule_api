@@ -115,12 +115,14 @@ describe 'Schedule API' do
     get "/api/v1/schedule/#{name}"
 
     json_response = JSON.parse(response.body, symbolize_names: true)
+
     expect(response).to be_successful
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:name)
     expect(json_response[:name]).to eq(name)
     expect(json_response).to have_key(:appointments)
     expect(json_response[:appointments]).to be_a(Array)
+    expect(json_response[:appointments].count).to eq(3)
     expect(json_response[:appointments][0]).to have_key(:name)
     expect(json_response[:appointments][0][:name]).to eq(apt_name_1)
     expect(json_response[:appointments][0]).to have_key(:start_time)
@@ -139,5 +141,13 @@ describe 'Schedule API' do
     expect(json_response[:appointments][2][:start_time]).to eq(start_time_3)
     expect(json_response[:appointments][2]).to have_key(:end_time)
     expect(json_response[:appointments][2][:end_time]).to eq(end_time_3)
+
+    delete "/api/v1/schedule/planner/appointment/#{apt_name_1}"
+
+    get "/api/v1/schedule/#{name}"
+
+    new_response = JSON.parse(response.body, symbolize_names: true)
+require 'pry' ; binding.pry 
+    expect(json_response[:appointments].count).to eq(2)
   end
 end
