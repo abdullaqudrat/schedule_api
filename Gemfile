@@ -34,12 +34,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
   gem 'shoulda-matchers'
-  gem 'database_cleaner'
   gem 'simplecov'
-  gem 'webmock'
-  gem 'vcr'
-  gem 'factory_bot_rails'
-  gem 'faker'
 end
 
 group :development do
