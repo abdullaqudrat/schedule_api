@@ -14,9 +14,17 @@ class Api::V1::ScheduleController < ApplicationController
     end
   end
 
-  private
-  def set_schedule
-    @schedule = Rails.cache.read("schedule")
+  def destroy
+    if Rails.cache.delete("schedule")
+      render json: {message: "Deleted schedule"}
+    else
+      render json: {message: "error", status: 404}
+    end
   end
+
+  private
+    def set_schedule
+      @schedule = Rails.cache.read("schedule")
+    end
 end
 
