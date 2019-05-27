@@ -1,9 +1,7 @@
 class Schedule
-  # has_many :appointments
-  
-  attr_reader :name
+  attr_reader :name, :appointments
   def initialize(name)
     @name = name
+    @appointments = []
   end
-
 end
