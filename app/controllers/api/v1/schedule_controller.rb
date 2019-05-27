@@ -7,7 +7,7 @@ class Api::V1::ScheduleController < ApplicationController
 
   def create
     new_schedule = Schedule.new(params[:name]) unless params[:name].nil?
-    if Rails.cache.write("schedule", new_schedule)
+    if new_schedule && Rails.cache.write("schedule", new_schedule)
       render json: {message: "Schedule '#{Rails.cache.read("schedule").name}' created"}
     else
       render json: {message: "error"}
