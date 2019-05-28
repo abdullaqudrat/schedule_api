@@ -27,9 +27,7 @@ in project directory
 ```
 docker-compose run web rails new . --force --no-deps --database=postgresql
 docker-compose build
-Ctrl + C
 docker-compose run web rake db:create
-Ctrl + C
 docker-compose up
 ```
 
