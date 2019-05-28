@@ -1,7 +1,8 @@
 class Api::V1::ScheduleController < ApplicationController
+  before_action :clean_schedule_params, only: [:create, :show, :destroy]
   
   def show 
-    schedule = Rails.cache.read(params[:id])
+    schedule = Rails.cache.read(@schedule_name)
     if schedule && schedule.sort_appointments
       Rails.cache.write(schedule.name, schedule)
       render json: schedule
@@ -11,7 +12,7 @@ class Api::V1::ScheduleController < ApplicationController
   end
 
   def create
-    new_schedule = Schedule.new(params[:name]) unless params[:name].nil?
+    new_schedule = Schedule.new(@param_name) unless params[:name].nil?
     if new_schedule && Rails.cache.write(new_schedule.name, new_schedule)
       render json: {message: "Schedule '#{Rails.cache.read(new_schedule.name).name}' created"}
     else
@@ -20,7 +21,7 @@ class Api::V1::ScheduleController < ApplicationController
   end
 
   def destroy
-    if Rails.cache.delete(params[:id])
+    if Rails.cache.delete(@schedule_name)
       render json: {message: "Deleted schedule"}
     else
       render json: {message: "error", status: 404}
@@ -28,8 +29,13 @@ class Api::V1::ScheduleController < ApplicationController
   end
 
   private
-    def set_schedule
-      
+    def clean_schedule_params
+      if params[:id]
+        @schedule_name = params[:id].gsub(/[-_]/, '-' => ' ', '_' => ' ')
+      end
+      if params[:name]
+        @param_name = params[:name].gsub(/[-_]/, '-' => ' ', '_' => ' ')
+      end
     end
 end
 

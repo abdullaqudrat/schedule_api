@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'Schedule API' do
   let(:name) { "planner" }
+  let(:complex_name) { "Abdulla's-Schedule" }
   let(:apt_name_1) { "dentist" }
   let(:apt_name_2) { "kids" }
   let(:apt_name_3) { "party" }
@@ -22,6 +23,17 @@ describe 'Schedule API' do
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:message)
     expect(json_response[:message]).to eq("Schedule 'planner' created")
+  end
+  it 'can create a schedule' do
+
+    post "/api/v1/schedule?name=#{complex_name}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:message)
+    expect(json_response[:message]).to eq("Schedule 'Abdulla's Schedule' created")
   end
   it 'fails to create a schedule with no params' do
 
@@ -47,6 +59,21 @@ describe 'Schedule API' do
     expect(json_response).to be_a(Hash)
     expect(json_response).to have_key(:name)
     expect(json_response[:name]).to eq("planner")
+  end
+  it 'can show a schedule' do
+
+    post "/api/v1/schedule?name=#{complex_name}"
+
+    expect(response).to be_successful
+
+    get "/api/v1/schedule/#{complex_name}"
+
+    json_response = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to be_successful
+    expect(json_response).to be_a(Hash)
+    expect(json_response).to have_key(:name)
+    expect(json_response[:name]).to eq("Abdulla's Schedule")
   end
   it 'fails to show a schedule' do
 
