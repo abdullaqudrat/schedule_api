@@ -5,7 +5,7 @@ Schedule API is a simple simple schedule management tool built in Ruby on Rails.
 ### Technologies Used
 
 - Rails 5.2.3
-- Ruby 2.4.1
+- Ruby 2.5.1
 
 ### System dependencies
 
@@ -18,9 +18,24 @@ Schedule API is a simple simple schedule management tool built in Ruby on Rails.
 
 ```
 git clone https://github.com/abdullaqudrat/schedule_api.git
-cd schedule_api
-bundle
 ```
+
+### Docker
+
+in project directory
+
+```
+docker-compose run web rails new . --force --no-deps --database=postgresql
+docker-compose build
+docker-compose build
+Ctrl + C
+docker-compose run web rake db:create
+Ctrl + C
+docker-compose build
+```
+
+start making API requests at http://localhost:3000
+
 ### Testing
 
 This API was driven by TDD and uses SimpleCov to measure test coverage.
