@@ -31,7 +31,7 @@ docker-compose build
 Ctrl + C
 docker-compose run web rake db:create
 Ctrl + C
-docker-compose build
+docker-compose up
 ```
 
 start making API requests at http://localhost:3000
