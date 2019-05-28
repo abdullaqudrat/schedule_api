@@ -17,9 +17,8 @@ Schedule API is a simple simple schedule management tool built in Ruby on Rails.
 ### Cloning this repo
 
 ```
-git clone https://github.com/abdullaqudrat/sales_engine.git
+git clone https://github.com/abdullaqudrat/schedule_api.git
 bundle
-
 ```
 ### Testing
 
